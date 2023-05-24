@@ -1,0 +1,15 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: db
+  username: postgres
+  password: password
+  pool: 5
+
+development:
+  <<: *default
+  database: ask_book_rails_dev
+
+test:
+  <<: *default
+  database: ask_book_rails_test
