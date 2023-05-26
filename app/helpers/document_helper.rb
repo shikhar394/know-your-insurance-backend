@@ -4,6 +4,7 @@ require 'csv'
 module DocumentHelper
     TOKENIZER = "cl100k_base"
     MAX_CHAT_TOKENS = 512
+    SEPARATOR = "\n* "
 
     class Document
         def self.extract_page_tokens(page_text, index)
@@ -28,12 +29,12 @@ module DocumentHelper
                 CSV.open(question.document.processed_pages_file, headers: true) do |csv|
                     csv.each do |row|
                         if row['title'] == title 
-                            if input_len + row["tokens"].length > MAX_CHAT_TOKENS
-                                remaining_tokens = MAX_CHAT_TOKENS - input_len
-                                most_relevant_sections_text << row["tokens"][0..remaining_tokens]
+                            if input_len + int(row["tokens"]) > MAX_CHAT_TOKENS
+                                remaining_tokens = MAX_CHAT_TOKENS - input_len - SEPARATOR.length
+                                most_relevant_sections_text << SEPARATOR + row["content"][0..remaining_tokens]
                             else
-                                most_relevant_sections_text << row["content"]
-                                input_len += row["tokens"].length 
+                                most_relevant_sections_text << SEPARATOR + row["content"]
+                                input_len += int(row["tokens"])
                             end
                         end
                     end

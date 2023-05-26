@@ -27,7 +27,7 @@ class OpenaiService
             Stop speaking once your point is made.\n\nContext that may be useful\n
             """
 
-        prompt = header + "\n\n\n" + question.context[0..4000] + "\n\n\nQ: " + question.question + "\n\nA: "
+        prompt = header + "\n\n\n" + question.context + "\n\n\nQ: " + question.question + "\n\nA: "
 
         answer = @client.chat(
             parameters: {
@@ -37,10 +37,11 @@ class OpenaiService
                 max_tokens: 150
             }    
         )
+        
+        puts answer
 
         answer = answer.dig("choices", 0, "message", "content")
-        
-        question.update!(answer: answer)
+        answer
         # TODO: Handle when answer doesn't give good enough answer.
     end
 end

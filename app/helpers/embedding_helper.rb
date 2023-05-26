@@ -15,7 +15,7 @@ module EmbeddingHelper
             dot_product / (Math.sqrt(a) * Math.sqrt(b))
         end
 
-        def self.get_most_relevant_sections(question)
+        def self.get_pages_most_similar_to_question(question, question_embedding)
             most_relevant_sections = []
             CSV.foreach(question.document.embedding_path, headers: true) do |row|
                 row_vals = row.fields
