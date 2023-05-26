@@ -4,14 +4,17 @@ class Document < ApplicationRecord
     has_many :questions
 
     validates :name, presence: true
+    
     after_find :initialize_file_paths
-    # add a condition to after_create to check whether processed_csv_path is nil
 
     attr_accessor :processed_pages_file, :processed_embeddings_file
+
+    after_create :parse_pdf
 
     # TODO: move function to helper and use a private function to call the function.
         
     def parse_pdf
+        initialize_file_paths
         # Parse the downloaded file
         File.open(original_file_path, 'rb') do |file|
             reader = PDF::Reader.new(file)

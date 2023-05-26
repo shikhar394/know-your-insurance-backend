@@ -10,24 +10,19 @@ class Question < ApplicationRecord
 
     after_create :get_answer
 
-    after_find :initialize_open_ai_service
-
     def self.random
         with_answer.most_asked.sample
     end
 
     # TODO: Change field question -> question_text
     def get_answer
+        @open_ai_service = OpenaiService.new
         update_context_with_relevant_sections if context.nil?
         answer = @open_ai_service.generate_answer(self)
         update!(answer: answer)
     end
 
     private
-
-    def initialize_open_ai_service
-        @open_ai_service = OpenaiService.new
-    end
 
     def update_context_with_relevant_sections
         # Should we max out memory by holding the doc embedding in memory?

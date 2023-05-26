@@ -5,6 +5,7 @@ class OpenaiService
     EMBEDDINGS_MODEL = 'text-embedding-ada-002'
     MAX_INPUT_LEN = 8191
     MAX_OUTPUT_LEN = 1536
+    OUTPUT_LEN = 256
 
     def initialize
         @client = OpenAI::Client.new
@@ -17,7 +18,7 @@ class OpenaiService
                 input: chunk
             }
         )
-        embedding_list = Array(embeddings_object.dig('data', 0, 'embedding'))
+        embedding_list = embeddings_object.dig('data', 0, 'embedding')
     end
 
     def generate_answer(question)
@@ -27,14 +28,18 @@ class OpenaiService
             Stop speaking once your point is made.\n\nContext that may be useful\n
             """
 
-        prompt = header + "\n\n\n" + question.context + "\n\n\nQ: " + question.question + "\n\nA: "
+        prompt = header + "\n\n\n" + question.context + "\n\n\n"
+        question_text = "Q:" + question.question + "\n\nA: "
 
         answer = @client.chat(
             parameters: {
                 model: "gpt-3.5-turbo", 
-                messages: [{ role: "user", content: prompt}],
+                messages: [
+                    { role: "system", content: prompt}, 
+                    { role: "user", content: question_text }
+                ],
                 temperature: 0.0,
-                max_tokens: 150
+                max_tokens: OUTPUT_LEN
             }    
         )
         

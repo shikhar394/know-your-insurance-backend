@@ -17,7 +17,7 @@ module EmbeddingHelper
 
         def self.get_pages_most_similar_to_question(question, question_embedding)
             most_relevant_sections = []
-            CSV.foreach(question.document.embedding_path, headers: true) do |row|
+            CSV.foreach(question.document.processed_embeddings_file, headers: true) do |row|
                 row_vals = row.fields
                 page_title = row_vals[0]
                 document_embedding = row_vals[1..-1].map(&:to_f)

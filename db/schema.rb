@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_061644) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "url"
+    t.text "original_file_path"
   end
 
   create_table "questions", force: :cascade do |t|
