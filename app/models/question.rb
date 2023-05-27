@@ -15,9 +15,9 @@ class Question < ApplicationRecord
     end
 
     # TODO: Change field question -> question_text
-    def get_answer
+    def get_answer(overwrite_context = false)
         @open_ai_service = OpenaiService.new
-        update_context_with_relevant_sections if context.nil?
+        update_context_with_relevant_sections if context.nil? || overwrite_context
         answer = @open_ai_service.generate_answer(self)
         update!(answer: answer)
     end
@@ -31,8 +31,6 @@ class Question < ApplicationRecord
         question_embedding = @open_ai_service.generate_embeddings([question])
 
         pages_most_similar_to_question = EmbeddingHelper::Embedding.get_pages_most_similar_to_question(self, question_embedding)
-
-    # TODO: Optimize this to use sorted values in the CSV.
 
         text_from_relevant_pages = DocumentHelper::Document.get_text_from_relevant_pages(pages_most_similar_to_question, self)
 

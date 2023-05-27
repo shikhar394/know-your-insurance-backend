@@ -3,7 +3,7 @@ require 'csv'
 
 module DocumentHelper
     TOKENIZER = "cl100k_base"
-    MAX_CONTEXT_LEN = 1000
+    MAX_CONTEXT_LEN = 2000
     SEPARATOR = "\n* "
 
     class Document
@@ -23,18 +23,20 @@ module DocumentHelper
                 CSV.open(question.document.processed_pages_file, headers: true) do |csv|
                     csv.each do |row|
                         if row['title'] == title 
+                            byebug
                             if input_len + row["tokens"].to_i > MAX_CONTEXT_LEN
-                                remaining_tokens = MAX_CONTEXT_LEN - input_len - SEPARATOR.length
-                                most_relevant_sections_text << SEPARATOR + row["content"][0..remaining_tokens]
+                                tokens_added = MAX_CONTEXT_LEN - input_len - SEPARATOR.length
+                                most_relevant_sections_text << SEPARATOR + row["content"][0..tokens_added]
+                                return most_relevant_sections_text.join('')
                             else
                                 most_relevant_sections_text << SEPARATOR + row["content"]
-                                input_len += row["tokens"].to_i
+                                tokens_added = row["tokens"].to_i + SEPARATOR.length
                             end
+                            input_len += tokens_added
                         end
                     end
                 end
             end
-            most_relevant_sections_text.join('')
         end
     end
 end
