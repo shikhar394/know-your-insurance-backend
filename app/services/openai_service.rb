@@ -1,5 +1,4 @@
 require "openai"
-require 'dotenv/load'
 
 class OpenaiService
     EMBEDDINGS_MODEL = 'text-embedding-ada-002'
