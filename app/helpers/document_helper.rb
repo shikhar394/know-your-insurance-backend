@@ -23,7 +23,6 @@ module DocumentHelper
                 CSV.open(question.document.processed_pages_file, headers: true) do |csv|
                     csv.each do |row|
                         if row['title'] == title 
-                            byebug
                             if input_len + row["tokens"].to_i > MAX_CONTEXT_LEN
                                 tokens_added = MAX_CONTEXT_LEN - input_len - SEPARATOR.length
                                 most_relevant_sections_text << SEPARATOR + row["content"][0..tokens_added]

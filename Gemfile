@@ -27,6 +27,8 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem 'rack-cors'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -55,6 +57,8 @@ gem 'csv'
 gem 'open-uri'
 
 gem 'byebug'
+
+gem "hashie"
 
 # Use Sass to process CSS
 # gem "sassc-rails"

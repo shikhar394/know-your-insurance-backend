@@ -16,6 +16,7 @@ class Question < ApplicationRecord
 
     # TODO: Change field question -> question_text
     def get_answer(overwrite_context = false)
+        return answer unless answer.nil?
         @open_ai_service = OpenaiService.new
         update_context_with_relevant_sections if context.nil? || overwrite_context
         answer = @open_ai_service.generate_answer(self)

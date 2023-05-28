@@ -43,8 +43,6 @@ class OpenaiService
             }    
         )
         
-        puts answer
-
         answer = answer.dig("choices", 0, "message", "content")
         answer
         # TODO: Handle when answer doesn't give good enough answer.

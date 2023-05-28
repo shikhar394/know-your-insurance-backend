@@ -18,9 +18,6 @@ class Document < ApplicationRecord
         # Parse the downloaded file
         File.open(original_file_path, 'rb') do |file|
             reader = PDF::Reader.new(file)
-
-            puts "File path #{self.processed_pages_file}"
-
             # TODO: Handle path creation better.
             CSV.open(self.processed_pages_file, 'w') do |csv|
                 csv << ['title', 'content', 'tokens']
