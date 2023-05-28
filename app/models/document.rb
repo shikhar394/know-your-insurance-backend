@@ -1,6 +1,8 @@
 require 'open-uri'
 
 class Document < ApplicationRecord
+    BASE_DIR_DOCUMENTS = 'lib/assets'
+
     has_many :questions
 
     validates :name, presence: true
@@ -34,8 +36,8 @@ class Document < ApplicationRecord
     private
 
     def initialize_file_paths
-        self.processed_pages_file = "#{name}.pages.csv"
-        self.processed_embeddings_file = "#{name}.embeddings.csv"
+        self.processed_pages_file = "lib/assets/#{name}.pages.csv"
+        self.processed_embeddings_file = "lib/assets/#{name}.embeddings.csv"
     end
 
     def generate_and_save_embeddings
