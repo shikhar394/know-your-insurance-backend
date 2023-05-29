@@ -3,16 +3,10 @@ class Question < ApplicationRecord
     SEPERATOR_LEN = 3
 
     validates :question, presence: true
-    
-    scope :with_answer, -> { where.not(answer: nil) }
-    
+        
     belongs_to :document
 
     after_create :get_answer
-
-    def self.random
-        with_answer.most_asked.sample
-    end
 
     # TODO: Change field question -> question_text
     def get_answer(overwrite_context = false)
@@ -20,7 +14,7 @@ class Question < ApplicationRecord
         @open_ai_service = OpenaiService.new
         update_context_with_relevant_sections if context.nil? || overwrite_context
         answer = @open_ai_service.generate_answer(self)
-        update!(answer: answer)
+        update!(answer: answer, ask_count: ask_count + 1)
     end
 
     private
